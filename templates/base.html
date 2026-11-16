@@ -1,0 +1,29 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CraftLoom{% endblock %} · CraftLoom</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<nav class="nav">
+  <a class="brand" href="{% url 'home' %}">🧵 CraftLoom</a>
+  {% if user.is_authenticated %}
+    <a href="{% url 'dashboard' %}">Dashboard</a>
+    <a href="{% url 'profile' %}">My Profile</a>
+    <span>{{ user.display_name }} <span class="badge">{{ user.get_role_display }}</span></span>
+    <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="linkbtn" type="submit">Log out</button></form>
+  {% else %}
+    <a href="{% url 'login' %}">Log in</a>
+    <a href="{% url 'register' %}">Register</a>
+  {% endif %}
+</nav>
+<main class="container {% block width %}{% endblock %}">
+  {% if messages %}
+    <ul class="messages">{% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}</ul>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+</body>
+</html>
