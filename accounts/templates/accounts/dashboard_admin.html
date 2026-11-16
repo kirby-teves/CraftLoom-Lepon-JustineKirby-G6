@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h1>Admin dashboard</h1>
+<div class="grid">
+  <div class="card"><div class="stat">{{ total_users }}</div>Total users</div>
+  <div class="card"><div class="stat">{{ artisan_count }}</div>Artisans</div>
+  <div class="card"><div class="stat">{{ admin_count }}</div>Admins</div>
+</div>
+<div class="card">
+  <h2>Recent users</h2>
+  <div style="overflow-x:auto"><table>
+    <tr><th>Username</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr>
+    {% for u in users %}
+    <tr><td>{{ u.username }}</td><td>{{ u.get_full_name }}</td><td>{{ u.email }}</td><td><span class="badge">{{ u.get_role_display }}</span></td><td>{{ u.date_joined|date:"M d, Y" }}</td></tr>
+    {% endfor %}
+  </table></div>
+  <a class="btn secondary" href="{% url 'admin:accounts_user_changelist' %}">Manage users in Django admin</a>
+</div>
+{% endblock %}

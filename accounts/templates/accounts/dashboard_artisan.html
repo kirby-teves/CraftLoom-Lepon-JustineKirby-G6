@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Artisan Dashboard{% endblock %}
+{% block content %}
+<h1>Hello, {{ user.display_name }} 👋</h1>
+<p class="muted">{% if user.business_name %}{{ user.business_name }} · {% endif %}Artisan dashboard</p>
+<div class="grid">
+  {% for name, desc in modules %}
+  <div class="card"><h2>{{ name }}</h2><p>{{ desc }}</p><span class="badge">Coming soon</span></div>
+  {% endfor %}
+  <div class="card"><h2>My Profile</h2><p>View or update your details.</p><a class="btn" href="{% url 'profile' %}">Open profile</a></div>
+</div>
+{% endblock %}
