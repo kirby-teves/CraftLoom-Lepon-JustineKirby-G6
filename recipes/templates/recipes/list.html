@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Recipes{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% if user.is_admin_role %}All products{% else %}My products{% endif %}</h1>
+  {% if not user.is_admin_role %}<a class="btn" href="{% url 'recipes:add' %}">+ New product</a>{% endif %}
+</div>
+<div class="grid">
+  <div class="card"><div class="stat">{{ products|length }}</div>Products</div>
+  <div class="card"><div class="stat">₱{{ average_unit_cost|floatformat:2 }}</div>Average cost per piece</div>
+</div>
+<form method="get" class="toolbar">
+  <input type="text" name="q" value="{{ query }}" placeholder="Search products">
+  <button class="btn" type="submit">Search</button>
+</form>
+<div class="card">
+  {% if products %}
+  <div style="overflow-x:auto"><table>
+    <tr>
+      <th>Product</th>{% if user.is_admin_role %}<th>Owner</th>{% endif %}
+      <th>Materials</th><th>Cost per piece</th><th>Suggested price</th><th></th>
+    </tr>
+    {% for p in products %}
+    <tr>
+      <td><a href="{% url 'recipes:detail' p.pk %}">{{ p.name }}</a></td>
+      {% if user.is_admin_role %}<td>{{ p.owner.username }}</td>{% endif %}
+      <td>{{ p.items.all|length }}</td>
+      <td>₱{{ p.unit_cost|floatformat:2 }}</td>
+      <td>₱{{ p.suggested_price|floatformat:2 }}</td>
+      <td class="actions"><a href="{% url 'recipes:detail' p.pk %}">View</a></td>
+    </tr>
+    {% endfor %}
+  </table></div>
+  {% else %}
+  <p class="muted">No products found.{% if not user.is_admin_role %} Create your first product to see its cost.{% endif %}</p>
+  {% endif %}
+</div>
+{% endblock %}

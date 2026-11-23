@@ -57,3 +57,21 @@ dd{margin:0}
 .grid .card{display:flex;flex-direction:column}
 .grid .card p{flex-grow:1}
 .grid .card .badge,.grid .card .btn{align-self:flex-start;margin-top:.5rem}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-bottom:1rem}
+.page-head h1{margin:0}
+.page-head .btn{margin-top:0}
+.toolbar{display:flex;gap:.6rem;flex-wrap:wrap;margin:1.25rem 0 1rem}
+.toolbar input,.toolbar select{padding:.55rem .7rem;border:1px solid var(--line);border-radius:8px;font:inherit;width:auto}
+.toolbar input{flex:1;min-width:180px}
+.toolbar .btn{margin-top:0}
+select,input[type=number]{width:100%;padding:.6rem .7rem;border:1px solid var(--line);border-radius:8px;font:inherit}
+.badge.warn{background:#fbe9c9;color:#8a5a00}
+.actions{white-space:nowrap}
+.link-danger{color:var(--err)}
+.btn.danger{background:var(--err)}
+.inline-form{display:inline;margin:0}
+.linkbtn-danger{background:none;border:0;color:var(--err);cursor:pointer;font:inherit;padding:0}
+.page-head .btn + .btn{margin-left:.5rem}
+.cost-table td:last-child{text-align:right;font-weight:600}
+.cost-table .total td{border-top:2px solid var(--line);font-size:1.05rem;color:var(--brand-dark)}
+textarea{width:100%;padding:.6rem .7rem;border:1px solid var(--line);border-radius:8px;font:inherit}

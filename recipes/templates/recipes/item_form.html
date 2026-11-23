@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Edit quantity{% endblock %}
+{% block width %}narrow{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>Edit quantity</h1>
+  <p class="muted">{{ item.material.name }} ({{ item.material.unit }}) in {{ item.product.name }}</p>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_form_fields.html" %}
+    <button class="btn" type="submit">Save</button>
+    <a class="btn secondary" href="{% url 'recipes:detail' item.product_id %}">Cancel</a>
+  </form>
+</div>
+{% endblock %}
