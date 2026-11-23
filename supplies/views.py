@@ -9,6 +9,7 @@ from accounts.models import User
 
 from .forms import UNIT_SUGGESTIONS, CategoryForm, MaterialForm
 from .models import Category, Material
+from django.db.models import Count, ProtectedError, Q
 
 
 def visible_materials(user):
@@ -75,7 +76,11 @@ def material_delete(request, pk):
     material = get_object_or_404(Material, pk=pk, owner=request.user)
     if request.method == "POST":
         name = material.name
-        material.delete()
+        try:
+            material.delete()
+        except ProtectedError:
+            messages.error(request, f'"{name}" is used in one or more recipes. Remove it from those recipes first.')
+            return redirect("supplies:list")
         messages.success(request, f'"{name}" was deleted.')
         return redirect("supplies:list")
     return render(request, "supplies/confirm_delete.html", {"material": material})
