@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Supplies{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>{% if user.is_admin_role %}All supplies{% else %}My supplies{% endif %}</h1>
+  {% if not user.is_admin_role %}
+  <div>
+    <a class="btn" href="{% url 'supplies:categories' %}">+ Add Category</a>
+    <a class="btn" href="{% url 'supplies:add' %}">+ Add material</a>
+  </div>
+  {% endif %}
+</div>
+<div class="grid">
+  <div class="card"><div class="stat">{{ materials|length }}</div>Materials</div>
+  <div class="card"><div class="stat">{{ low_count }}</div>Low stock</div>
+  <div class="card"><div class="stat">₱{{ total_value|floatformat:2 }}</div>Stock value</div>
+</div>
+<form method="get" class="toolbar">
+  <input type="text" name="q" value="{{ query }}" placeholder="Search materials or categories">
+  <select name="category">
+    <option value="">All categories</option>
+    {% for c in categories %}<option value="{{ c.pk }}" {% if selected_category == c.pk|stringformat:"s" %}selected{% endif %}>{{ c.name }}</option>{% endfor %}
+  </select>
+  <button class="btn" type="submit">Filter</button>
+</form>
+<div class="card">
+  {% if materials %}
+  <div style="overflow-x:auto"><table>
+    <tr>
+      <th>Material</th><th>Category</th>{% if user.is_admin_role %}<th>Owner</th>{% endif %}
+      <th>In stock</th><th>Cost per unit</th><th>Stock value</th>{% if not user.is_admin_role %}<th></th>{% endif %}
+    </tr>
+    {% for m in materials %}
+    <tr>
+      <td>{{ m.name }}</td>
+      <td>{{ m.category.name|default:"Uncategorized" }}</td>
+      {% if user.is_admin_role %}<td>{{ m.owner.username }}</td>{% endif %}
+      <td>{{ m.quantity_in_stock|floatformat:"-3" }} {{ m.unit }}{% if m.is_low_stock %} <span class="badge warn">Low</span>{% endif %}</td>
+      <td>₱{{ m.unit_cost|floatformat:2 }}</td>
+      <td>₱{{ m.stock_value|floatformat:2 }}</td>
+      {% if not user.is_admin_role %}
+      <td class="actions">
+        <a href="{% url 'supplies:edit' m.pk %}">Edit</a> ·
+        <a class="link-danger" href="{% url 'supplies:delete' m.pk %}">Delete</a>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table></div>
+  {% else %}
+  <p class="muted">No materials found.{% if not user.is_admin_role %} Add your first one to get started.{% endif %}</p>
+  {% endif %}
+</div>
+{% endblock %}
