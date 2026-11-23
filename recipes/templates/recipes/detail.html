@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+{% block content %}
+<p class="muted"><a href="{% url 'recipes:list' %}">← All products</a></p>
+<div class="page-head">
+  <div>
+    <h1>{{ product.name }}</h1>
+    {% if user.is_admin_role %}<span class="muted">Owner: {{ product.owner.username }}</span>{% endif %}
+  </div>
+  {% if can_edit %}
+  <div>
+    <a class="btn" href="{% url 'recipes:edit' product.pk %}">Edit product</a>
+    <a class="btn danger" href="{% url 'recipes:delete' product.pk %}">Delete</a>
+  </div>
+  {% endif %}
+</div>
+{% if product.description %}<p>{{ product.description }}</p>{% endif %}
+<div class="grid">
+  <div class="card"><div class="stat">₱{{ product.unit_cost|floatformat:2 }}</div>Cost per piece</div>
+  <div class="card"><div class="stat">₱{{ product.suggested_price|floatformat:2 }}</div>Suggested price ({{ product.markup_percent|floatformat:"-2" }}% markup)</div>
+  <div class="card"><div class="stat">₱{{ product.profit_per_unit|floatformat:2 }}</div>Profit per piece</div>
+</div>
+<div class="card">
+  <h2>Cost breakdown (per batch)</h2>
+  <table class="cost-table">
+    <tr><td>Materials</td><td>₱{{ product.materials_cost|floatformat:2 }}</td></tr>
+    <tr><td>Labor</td><td>₱{{ product.labor_cost|floatformat:2 }}</td></tr>
+    <tr class="total"><td>Batch total</td><td>₱{{ product.batch_cost|floatformat:2 }}</td></tr>
+    <tr><td>Pieces per batch</td><td>{{ product.yield_quantity }}</td></tr>
+    <tr class="total"><td>Cost per piece</td><td>₱{{ product.unit_cost|floatformat:2 }}</td></tr>
+  </table>
+</div>
+<div class="card">
+  <h2>Recipe</h2>
+  {% if items %}
+  <div style="overflow-x:auto"><table>
+    <tr><th>Material</th><th>Quantity</th><th>Cost per unit</th><th>Line cost</th>{% if can_edit %}<th></th>{% endif %}</tr>
+    {% for item in items %}
+    <tr>
+      <td>{{ item.material.name }}</td>
+      <td>{{ item.quantity_used|floatformat:"-3" }} {{ item.material.unit }}</td>
+      <td>₱{{ item.material.unit_cost|floatformat:2 }}</td>
+      <td>₱{{ item.line_cost|floatformat:2 }}</td>
+      {% if can_edit %}
+      <td class="actions">
+        <a href="{% url 'recipes:item_edit' item.pk %}">Edit</a> ·
+        <form method="post" action="{% url 'recipes:item_delete' item.pk %}" class="inline-form">{% csrf_token %}<button class="linkbtn-danger" type="submit">Remove</button></form>
+      </td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table></div>
+  {% else %}
+  <p class="muted">No materials in this recipe yet.</p>
+  {% endif %}
+</div>
+{% if can_edit %}
+<div class="card">
+  <h2>Add a material</h2>
+  {% if item_form.fields.material.queryset.exists %}
+  <form method="post" action="{% url 'recipes:item_add' product.pk %}" novalidate>
+    {% csrf_token %}
+    {% include "accounts/_form_fields.html" with form=item_form %}
+    <button class="btn" type="submit">Add to recipe</button>
+  </form>
+  {% else %}
+  <p class="muted">All your materials are already in this recipe, or you have no materials yet. <a href="{% url 'supplies:add' %}">Add a material</a>.</p>
+  {% endif %}
+</div>
+{% endif %}
+{% endblock %}
