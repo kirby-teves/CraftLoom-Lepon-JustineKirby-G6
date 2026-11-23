@@ -4,21 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}CraftLoom{% endblock %} · CraftLoom</title>
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/logo-icon.svg' %}">
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
 <nav class="nav">
-  <a class="brand" href="{% url 'home' %}">🧵 CraftLoom</a>
-  {% if user.is_authenticated %}
-    <a href="{% url 'dashboard' %}">Dashboard</a>
-    <a href="{% url 'profile' %}">My Profile</a>
-    <span>{{ user.display_name }} <span class="badge">{{ user.get_role_display }}</span></span>
-    <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="linkbtn" type="submit">Log out</button></form>
-  {% else %}
-    <a href="{% url 'login' %}">Log in</a>
-    <a href="{% url 'register' %}">Register</a>
-  {% endif %}
+  <div class="nav-left">
+    <a href="{% url 'home' %}" aria-label="CraftLoom home">
+      <img class="brand-icon" src="{% static 'img/logo-icon.svg' %}" width="44" height="44" alt="CraftLoom logo">
+    </a>
+  </div>
+  <a class="wordmark" href="{% url 'home' %}">
+    <span class="wordmark-text">Craft<span class="loom">Loom</span></span>
+    <svg viewBox="0 0 70 12" aria-hidden="true"><path d="M2 9 l8 -7 l8 7 l8 -7 l8 7 l8 -7 l8 7 l8 -7 l8 7" fill="none" stroke="#D9A441" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+  <div class="nav-right">
+    {% if user.is_authenticated %}
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'profile' %}">My Profile</a>
+      <span>{{ user.display_name }} <span class="badge">{{ user.get_role_display }}</span></span>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="linkbtn" type="submit">Log out</button></form>
+    {% else %}
+      <a href="{% url 'login' %}">Log in</a>
+      <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+  </div>
 </nav>
+<div class="weave-bar"></div>
 <main class="container {% block width %}{% endblock %}">
   {% if messages %}
     <ul class="messages">{% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}</ul>
