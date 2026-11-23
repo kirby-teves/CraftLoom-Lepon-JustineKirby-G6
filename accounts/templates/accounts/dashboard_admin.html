@@ -8,6 +8,11 @@
   <div class="card"><div class="stat">{{ admin_count }}</div>Admins</div>
 </div>
 <div class="card">
+  <h2>Supplies overview</h2>
+  <p>View every artisan's material catalog.</p>
+  <a class="btn" href="{% url 'supplies:list' %}">View all supplies</a>
+</div>
+<div class="card">
   <h2>Recent users</h2>
   <div style="overflow-x:auto"><table>
     <tr><th>Username</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr>
