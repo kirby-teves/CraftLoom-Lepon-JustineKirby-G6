@@ -4,9 +4,17 @@
 <h1>Hello, {{ user.display_name }} 👋</h1>
 <p class="muted">{% if user.business_name %}{{ user.business_name }} · {% endif %}Artisan dashboard</p>
 <div class="grid">
-  {% for name, desc in modules %}
-  <div class="card"><h2>{{ name }}</h2><p>{{ desc }}</p><span class="badge">Coming soon</span></div>
+  {% for name, desc, link in modules %}
+  <div class="card">
+    <h2>{{ name }}</h2>
+    <p>{{ desc }}</p>
+    {% if link %}<a class="btn" href="{% url link %}">Open</a>{% else %}<span class="badge">Coming soon</span>{% endif %}
+  </div>
   {% endfor %}
-  <div class="card"><h2>My Profile</h2><p>View or update your details.</p><a class="btn" href="{% url 'profile' %}">Open profile</a></div>
+  <div class="card">
+    <h2>My Profile</h2>
+    <p>View or update your details.</p>
+    <a class="btn" href="{% url 'profile' %}">Open profile</a>
+  </div>
 </div>
 {% endblock %}

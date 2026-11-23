@@ -21,6 +21,7 @@
   <div class="nav-right">
     {% if user.is_authenticated %}
       <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'supplies:list' %}">Supplies</a>
       <a href="{% url 'profile' %}">My Profile</a>
       <span>{{ user.display_name }} <span class="badge">{{ user.get_role_display }}</span></span>
       <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="linkbtn" type="submit">Log out</button></form>
