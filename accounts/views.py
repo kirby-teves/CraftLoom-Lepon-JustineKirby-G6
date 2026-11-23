@@ -57,7 +57,7 @@ def dashboard(request):
 def artisan_dashboard(request):
     modules = [
         ("Supply Manager", "Track raw materials, categories and units.", "supplies:list"),
-        ("Recipe & Pricing Creator", "Build product recipes and see exact unit costs.", None),
+        ("Recipe & Pricing Creator", "Build product recipes and see exact unit costs.", "recipes:list"),
         ("Production Logger", "Log batches and auto-deduct stock.", None),
     ]
     return render(request, "accounts/dashboard_artisan.html", {"modules": modules})
